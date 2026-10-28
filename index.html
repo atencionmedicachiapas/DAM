@@ -1,0 +1,860 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Portal Ejecutivo · Atención Médica</title>
+<meta name="description" content="Portal Ejecutivo de la Dirección de Atención Médica, Instituto de Salud del Estado de Chiapas.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#A61626">
+<meta name="color-scheme" content="light">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icono-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Portal DAM">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap">
+<style>
+  :root {
+    --rojo: #A61626;
+    --rojo-osc: #7F0F1C;
+    --rojo-suave: #F8E8EA;
+    --verde: #009181;
+    --verde-texto: #00756A;
+    --verde-suave: #E3F2F0;
+    --magenta: #C71D68;
+    --magenta-texto: #B01A5C;
+    --magenta-suave: #FBE9F1;
+    --fondo: #F6F4F4;
+    --superficie: #FFFFFF;
+    --borde: #E6E1E1;
+    --pista: #F1ECEC;
+    --texto: #1E1B1D;
+    --texto-2: #5E5A5C;
+    --radio: 14px;
+    --ancho: 1120px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--fondo);
+    color: var(--texto);
+    font-family: Montserrat, system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+  }
+  a { color: var(--rojo); }
+  a:hover { color: var(--rojo-osc); }
+  button, input { font-family: inherit; }
+  :focus-visible { outline: 3px solid var(--verde); outline-offset: 2px; }
+  [hidden] { display: none !important; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  /* ---------- Botones ---------- */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    min-height: 48px; padding: 0 20px; border-radius: 12px; border: none;
+    font-size: 15px; font-weight: 700; cursor: pointer; text-decoration: none;
+  }
+  .btn-primario { background: var(--rojo); color: #fff; }
+  .btn-primario:hover { background: var(--rojo-osc); color: #fff; }
+  .btn-primario:disabled { background: #C9A3A8; cursor: wait; }
+  .btn-texto { background: none; color: var(--rojo); min-height: 44px; padding: 0 10px; }
+  .btn-texto:disabled { color: var(--texto-2); cursor: default; }
+  .btn-icono {
+    width: 44px; height: 44px; border-radius: 10px; border: none; background: none;
+    display: inline-flex; align-items: center; justify-content: center; cursor: pointer; color: var(--texto);
+    flex-shrink: 0;
+  }
+  .btn-icono:hover { background: var(--fondo); }
+  .btn-icono svg { width: 22px; height: 22px; }
+
+  /* ---------- Carga ---------- */
+  .vista-centro {
+    min-height: 100dvh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 20px; padding: 24px; text-align: center; background: var(--superficie);
+  }
+  .girador {
+    width: 32px; height: 32px; border-radius: 50%;
+    border: 3px solid var(--pista); border-top-color: var(--rojo);
+    animation: girar 0.9s linear infinite;
+  }
+  @keyframes girar { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .girador { animation-duration: 2.5s; } .esqueleto { animation: none !important; } }
+
+  /* ---------- Acceso ---------- */
+  #vista-acceso {
+    min-height: 100dvh; background: var(--superficie); border-top: 6px solid var(--rojo);
+    display: flex; justify-content: center;
+  }
+  .acceso {
+    width: 100%; max-width: 400px; padding: 40px 24px calc(28px + env(safe-area-inset-bottom));
+    display: flex; flex-direction: column; gap: 28px;
+  }
+  .acceso-cabeza { display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
+  .acceso-cabeza img { width: 170px; height: 170px; object-fit: contain; }
+  .acceso-cabeza h1 { margin: 0; font-size: 24px; font-weight: 800; }
+  .acceso-cabeza p { margin: 6px 0 0; font-size: 14px; color: var(--texto-2); line-height: 1.5; }
+  .formulario { display: flex; flex-direction: column; gap: 16px; }
+  .campo { display: flex; flex-direction: column; gap: 6px; }
+  .campo label { font-size: 13px; font-weight: 700; }
+  .campo input[type=email], .campo input[type=text] {
+    height: 50px; border: 1.5px solid #B9B2B2; border-radius: 10px; padding: 0 14px;
+    font-size: 16px; color: var(--texto); background: #fff; width: 100%;
+  }
+  .campo input:focus { border-color: var(--verde); outline: none; box-shadow: 0 0 0 3px var(--verde-suave); }
+  #codigo { font-size: 22px; letter-spacing: 0.35em; text-align: center; }
+  .ayuda { font-size: 12px; color: var(--texto-2); line-height: 1.5; }
+  .correo-enviado {
+    display: flex; justify-content: space-between; align-items: center; gap: 8px;
+    background: var(--fondo); border-radius: 10px; padding: 4px 4px 4px 14px; font-size: 14px;
+  }
+  .correo-enviado span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .casilla { display: flex; align-items: center; gap: 10px; font-size: 14px; min-height: 44px; cursor: pointer; }
+  .casilla input { width: 20px; height: 20px; accent-color: var(--verde); margin: 0; }
+  .mensaje { font-size: 13px; line-height: 1.5; border-radius: 10px; padding: 10px 12px; }
+  .mensaje.error { background: var(--rojo-suave); color: var(--rojo-osc); }
+  .mensaje.info { background: var(--verde-suave); color: var(--verde-texto); }
+  .acceso-pie { margin-top: auto; font-size: 11px; color: var(--texto-2); text-align: center; line-height: 1.5; }
+
+  /* ---------- Encabezado ---------- */
+  .cabecera { background: var(--superficie); border-bottom: 4px solid var(--rojo); position: relative; z-index: 5; }
+  .cabecera-int {
+    max-width: var(--ancho); margin: 0 auto; padding: calc(12px + env(safe-area-inset-top)) 20px 12px;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  }
+  .marca { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .marca img { width: 60px; height: 60px; object-fit: contain; flex-shrink: 0; }
+  .marca-sep { width: 1px; height: 40px; background: var(--borde); display: none; }
+  .marca-texto { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .sobre { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--texto-2); }
+  .marca-texto strong { font-size: 14px; font-weight: 800; line-height: 1.25; }
+  .cuenta { position: relative; display: flex; align-items: center; gap: 12px; }
+  .cuenta-nombre { font-size: 13px; color: var(--texto-2); display: none; }
+  .avatar {
+    width: 44px; height: 44px; border-radius: 22px; border: none; background: var(--rojo-suave);
+    color: var(--rojo); font-size: 14px; font-weight: 800; cursor: pointer; flex-shrink: 0;
+  }
+  .menu-cuenta {
+    position: absolute; right: 0; top: 52px; width: 270px; background: #fff; border: 1px solid var(--borde);
+    border-radius: 12px; box-shadow: 0 12px 32px rgba(30, 27, 29, 0.14); padding: 16px; z-index: 20;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .menu-cuenta strong { font-size: 14px; }
+  .menu-cuenta span { font-size: 12px; color: var(--texto-2); margin-bottom: 8px; }
+  .menu-cuenta .btn { width: 100%; min-height: 44px; font-size: 14px; }
+
+  /* ---------- Inicio ---------- */
+  .contenido {
+    max-width: var(--ancho); margin: 0 auto; padding: 20px 20px calc(32px + env(safe-area-inset-bottom));
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  .saludo { display: flex; flex-direction: column; gap: 2px; }
+  .saludo h1 { margin: 0; font-size: 22px; font-weight: 800; line-height: 1.2; }
+  .saludo span { font-size: 13px; color: var(--texto-2); }
+  .seccion-titulo { font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--texto-2); margin: 6px 0 -4px; }
+  .rejilla { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 14px; }
+
+  .tarjeta {
+    background: var(--superficie); border: 1px solid var(--borde); border-radius: var(--radio);
+    padding: 18px; display: flex; flex-direction: column; gap: 12px;
+  }
+  .tarjeta-cabeza { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .tarjeta-cabeza h2 { margin: 0; font-size: 14px; font-weight: 700; }
+  .pastilla { font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 12px; white-space: nowrap; }
+  .c-magenta .pastilla { color: var(--magenta-texto); background: var(--magenta-suave); }
+  .c-verde .pastilla { color: var(--verde-texto); background: var(--verde-suave); }
+  .c-rojo .pastilla { color: var(--rojo); background: var(--rojo-suave); }
+  .cifra { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+  .cifra b { font-size: 36px; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
+  .cifra span { font-size: 13px; color: var(--texto-2); }
+  .barra { height: 8px; border-radius: 4px; background: var(--pista); overflow: hidden; }
+  .barra i { display: block; height: 100%; border-radius: 4px; width: 0; transition: width 0.8s ease; }
+  .c-magenta .barra i { background: var(--magenta); }
+  .c-verde .barra i { background: var(--verde); }
+  .c-rojo .barra i { background: var(--rojo); }
+  .tarjeta-pie { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .tarjeta-pie small { font-size: 12px; color: var(--texto-2); }
+  .tarjeta-pie button {
+    border: none; background: none; color: var(--rojo); font-size: 13px; font-weight: 700;
+    padding: 12px 0 12px 12px; cursor: pointer;
+  }
+  .tarjeta-pie button:hover { color: var(--rojo-osc); }
+  .sin-dato { font-size: 13px; color: var(--texto-2); line-height: 1.5; }
+  .esqueleto { background: linear-gradient(90deg, var(--pista) 25%, #F8F5F5 50%, var(--pista) 75%); background-size: 200% 100%; animation: brillo 1.4s ease infinite; border-radius: 6px; }
+  @keyframes brillo { to { background-position: -200% 0; } }
+
+  .acceso-directo {
+    display: flex; align-items: center; gap: 14px; background: var(--rojo); color: #fff;
+    border-radius: var(--radio); padding: 16px 18px; border: none; cursor: pointer; text-align: left; width: 100%;
+    font-size: inherit; min-height: 72px;
+  }
+  .acceso-directo:hover { background: var(--rojo-osc); }
+  .acceso-directo .ico {
+    width: 40px; height: 40px; border-radius: 10px; background: #fff; color: var(--rojo);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .acceso-directo .ico svg { width: 22px; height: 22px; }
+  .acceso-directo .txt { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
+  .acceso-directo .txt strong { font-size: 15px; font-weight: 700; }
+  .acceso-directo .txt span { font-size: 12px; color: #FBE3E5; line-height: 1.4; }
+  .acceso-directo > svg { width: 20px; height: 20px; flex-shrink: 0; }
+
+  .pie-inicio { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 11px; color: var(--texto-2); padding-top: 4px; }
+
+  /* ---------- Módulo ---------- */
+  #vista-modulo { height: 100dvh; display: flex; flex-direction: column; background: var(--fondo); }
+  #vista-modulo .cabecera-int { padding: calc(8px + env(safe-area-inset-top)) 10px 8px; gap: 4px; max-width: none; }
+  .mod-titulo { flex: 1; display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .mod-titulo img { width: 40px; height: 40px; object-fit: contain; flex-shrink: 0; }
+  .mod-titulo div { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+  .mod-titulo strong { font-size: 16px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .marco { flex: 1; min-height: 0; position: relative; background: #fff; }
+  .marco iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #fff; }
+  .marco-estado {
+    position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 14px; padding: 32px; text-align: center; background: #fff; z-index: 2;
+  }
+  .marco-estado p { margin: 0; font-size: 14px; color: var(--texto-2); line-height: 1.5; max-width: 320px; }
+  .navegacion {
+    background: var(--superficie); border-top: 1px solid var(--borde);
+    display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 4px;
+    padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
+  }
+  .navegacion button {
+    min-height: 54px; border: none; background: none; border-radius: 10px; cursor: pointer;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+    color: var(--texto-2); font-size: 11px; font-weight: 600; padding: 4px 2px;
+  }
+  .navegacion button svg { width: 22px; height: 22px; }
+  .navegacion button[aria-current="page"] { color: var(--rojo); background: var(--rojo-suave); font-weight: 800; }
+
+  /* ---------- Aviso flotante ---------- */
+  .aviso {
+    position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom)); transform: translateX(-50%);
+    background: var(--texto); color: #fff; padding: 12px 18px; border-radius: 12px; font-size: 14px;
+    max-width: calc(100% - 32px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); z-index: 50; text-align: center;
+  }
+
+  /* ---------- Escritorio ---------- */
+  @media (min-width: 900px) {
+    .marca img { width: 72px; height: 72px; }
+    .marca-sep { display: block; }
+    .marca-texto strong { font-size: 17px; }
+    .cuenta-nombre { display: inline; }
+    .contenido { padding-top: 32px; gap: 22px; }
+    .saludo { flex-direction: row; justify-content: space-between; align-items: flex-end; }
+    .saludo h1 { font-size: 30px; }
+    .saludo span { font-size: 14px; }
+    .tarjeta { padding: 24px; gap: 16px; }
+    .cifra b { font-size: 48px; }
+    .barra { height: 10px; }
+    .acceso-directo { flex-direction: column; align-items: flex-start; justify-content: space-between; padding: 24px; gap: 20px; }
+    .acceso-directo > svg { display: none; }
+    .acceso-directo .ico { width: 48px; height: 48px; }
+    .acceso-directo .txt strong { font-size: 20px; }
+    .acceso-directo .txt span { font-size: 13px; }
+    #vista-modulo .cabecera-int { padding: 8px 20px; }
+    #vista-modulo .cabecera { order: -2; }
+    .navegacion {
+      order: -1; grid-auto-flow: column; grid-auto-columns: max-content; justify-content: start;
+      border-top: none; border-bottom: 1px solid var(--borde); padding: 6px 20px;
+    }
+    .navegacion button { flex-direction: row; min-height: 44px; padding: 0 16px; font-size: 13px; gap: 8px; }
+    .navegacion button svg { width: 18px; height: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ CARGA / SIN CONEXIÓN ============ -->
+<section id="vista-cargando" class="vista-centro" aria-live="polite">
+  <img src="logo-salud.png" alt="Salud, Gobierno de Chiapas" width="140" height="140">
+  <div class="girador" id="cargando-girador" aria-hidden="true"></div>
+  <p id="cargando-texto" class="ayuda">Cargando…</p>
+  <button class="btn btn-primario" id="btn-reintentar" hidden>Reintentar</button>
+</section>
+
+<!-- ============ ACCESO ============ -->
+<section id="vista-acceso" hidden>
+  <div class="acceso">
+    <div class="acceso-cabeza">
+      <img src="logo-salud.png" alt="Humanismo que transforma. Gobierno de Chiapas 2024–2030. Salud">
+      <div>
+        <h1>Portal Ejecutivo</h1>
+        <p>Dirección de Atención Médica · Acceso exclusivo</p>
+      </div>
+    </div>
+
+    <!-- Paso 1: correo -->
+    <form id="form-correo" class="formulario" novalidate>
+      <div class="campo">
+        <label for="correo">Correo institucional</label>
+        <input id="correo" type="email" autocomplete="email" inputmode="email" placeholder="nombre@salud.gob.mx" required>
+      </div>
+      <div id="msg-correo" class="mensaje" role="alert" hidden></div>
+      <button class="btn btn-primario" type="submit" id="btn-enviar">Enviar código</button>
+    </form>
+
+    <!-- Paso 2: código -->
+    <form id="form-codigo" class="formulario" novalidate hidden>
+      <div class="correo-enviado">
+        <span id="correo-mostrado"></span>
+        <button type="button" class="btn-texto btn" id="btn-cambiar">Cambiar</button>
+      </div>
+      <div class="campo">
+        <label for="codigo">Código de verificación</label>
+        <input id="codigo" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="······" required>
+        <span class="ayuda">Si el correo está autorizado, le llegará un código de 6 dígitos. Vence en 10 minutos. Revise también la carpeta de correo no deseado.</span>
+      </div>
+      <label class="casilla" for="recordar">
+        <input id="recordar" type="checkbox" checked>
+        Mantener la sesión en este dispositivo
+      </label>
+      <div id="msg-codigo" class="mensaje" role="alert" hidden></div>
+      <button class="btn btn-primario" type="submit" id="btn-entrar">Entrar</button>
+      <button class="btn btn-texto" type="button" id="btn-reenviar" style="align-self:center">Reenviar código</button>
+    </form>
+
+    <p class="acceso-pie">Uso exclusivo institucional. El acceso queda registrado.</p>
+  </div>
+</section>
+
+<!-- ============ INICIO ============ -->
+<section id="vista-inicio" hidden>
+  <header class="cabecera">
+    <div class="cabecera-int">
+      <div class="marca">
+        <img src="logo-salud.png" alt="Salud, Gobierno de Chiapas">
+        <div class="marca-sep" aria-hidden="true"></div>
+        <div class="marca-texto">
+          <span class="sobre">Portal Ejecutivo</span>
+          <strong>Dirección de Atención Médica</strong>
+        </div>
+      </div>
+      <div class="cuenta">
+        <span class="cuenta-nombre" id="cuenta-nombre"></span>
+        <button class="avatar" id="btn-avatar" aria-haspopup="true" aria-expanded="false" aria-label="Menú de la cuenta"></button>
+        <div class="menu-cuenta" id="menu-cuenta" hidden>
+          <strong id="menu-nombre"></strong>
+          <span id="menu-cargo"></span>
+          <button class="btn btn-primario" id="btn-salir">Cerrar sesión</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="contenido">
+    <div class="saludo">
+      <h1 id="saludo"></h1>
+      <span id="fecha-hoy"></span>
+    </div>
+
+    <div class="seccion-titulo">Indicadores</div>
+    <div class="rejilla" id="rejilla-indicadores"></div>
+
+    <div class="seccion-titulo">Accesos directos</div>
+    <div class="rejilla" id="rejilla-accesos"></div>
+
+    <div class="pie-inicio">
+      <span id="consultado"></span>
+      <button class="btn btn-texto" id="btn-actualizar">Actualizar</button>
+    </div>
+  </main>
+</section>
+
+<!-- ============ MÓDULO ============ -->
+<section id="vista-modulo" hidden>
+  <header class="cabecera">
+    <div class="cabecera-int">
+      <button class="btn-icono" id="btn-volver" aria-label="Volver al inicio">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+      </button>
+      <div class="mod-titulo">
+        <img src="logo-salud.png" alt="" aria-hidden="true">
+        <div>
+          <span class="sobre">Portal Ejecutivo</span>
+          <strong id="mod-nombre"></strong>
+        </div>
+      </div>
+      <button class="btn-icono" id="btn-recargar" aria-label="Recargar módulo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg>
+      </button>
+      <button class="btn-icono" id="btn-pestana" aria-label="Abrir en pestaña nueva">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>
+      </button>
+    </div>
+  </header>
+  <div class="marco">
+    <div class="marco-estado" id="marco-estado">
+      <div class="girador" id="marco-girador" aria-hidden="true"></div>
+      <p id="marco-texto">Abriendo módulo…</p>
+      <button class="btn btn-primario" id="marco-reintentar" hidden>Reintentar</button>
+    </div>
+  </div>
+  <nav class="navegacion" id="navegacion" aria-label="Módulos"></nav>
+</section>
+
+<div class="aviso" id="aviso" role="status" hidden></div>
+
+<script>
+/* ============================================================
+ *  CONFIGURACIÓN DE LA PÁGINA
+ *  API_URL: dirección /exec del servidor del portal (Apps Script).
+ *  MODULOS: lo que se muestra en el portal. Para agregar un módulo
+ *  nuevo, añada una entrada aquí y en CONFIG.MODULOS del servidor
+ *  con el mismo "id".
+ * ============================================================ */
+const API_URL = 'PEGAR_URL_EXEC_DEL_PORTAL';
+
+const MODULOS = [
+  { id: 'mastografias', nombre: 'Metas de Mastografía', corto: 'Mastografías', color: 'magenta', icono: 'grafica', indicador: 'mastografias' },
+  { id: 'sus',          nombre: 'SUS Chiapas 2026',     corto: 'SUS',          color: 'verde',   icono: 'ubicacion', indicador: 'sus' },
+  { id: 'didam',        nombre: 'DIDAM',                corto: 'DIDAM',        color: 'rojo',    icono: 'tablero', indicador: null,
+    descripcion: 'Portal de dirección con los indicadores de cada subdirección y área.' }
+];
+
+/* ============================================================ */
+
+const CLAVE_TOKEN = 'portalDAM.token';
+const ICONOS = {
+  inicio: '<path d="M4 11l8-7 8 7"/><path d="M6 10v10h12V10"/>',
+  grafica: '<path d="M4 19h16"/><path d="M7 15l4-4 3 3 5-6"/>',
+  ubicacion: '<path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>',
+  tablero: '<rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/>',
+  flecha: '<path d="M9 6l6 6-6 6"/>'
+};
+const svg = (nombre, grosor = 1.8) =>
+  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${grosor}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONOS[nombre] || ICONOS.tablero}</svg>`;
+const $ = (id) => document.getElementById(id);
+const esc = (t) => String(t ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const numero = (n, dec = 0) => Number(n).toLocaleString('es-MX', { maximumFractionDigits: dec, minimumFractionDigits: 0 });
+
+const estado = { perfil: null, moduloActual: null, cooldown: 0 };
+
+/* ---------- Sesión guardada en el dispositivo ---------- */
+function leerToken() {
+  try { return localStorage.getItem(CLAVE_TOKEN) || sessionStorage.getItem(CLAVE_TOKEN); } catch (e) { return null; }
+}
+function guardarToken(token, recordar) {
+  try {
+    (recordar ? localStorage : sessionStorage).setItem(CLAVE_TOKEN, token);
+    (recordar ? sessionStorage : localStorage).removeItem(CLAVE_TOKEN);
+  } catch (e) {}
+}
+function borrarToken() {
+  try { localStorage.removeItem(CLAVE_TOKEN); sessionStorage.removeItem(CLAVE_TOKEN); } catch (e) {}
+}
+
+/* ---------- Comunicación con el servidor (JSONP) ---------- */
+function api(accion, params = {}) {
+  return new Promise((resolve, reject) => {
+    const cb = '__dam' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+    const qs = new URLSearchParams({ ...params, accion, callback: cb });
+    const s = document.createElement('script');
+    const limpiar = () => { clearTimeout(t); window[cb] = () => {}; s.remove(); };
+    const t = setTimeout(() => { limpiar(); reject(new Error('tiempo')); }, 25000);
+    window[cb] = (data) => { limpiar(); resolve(data || {}); };
+    s.onerror = () => { limpiar(); reject(new Error('red')); };
+    s.src = API_URL + '?' + qs.toString();
+    document.head.appendChild(s);
+  });
+}
+
+// Para llamadas que requieren sesión: si venció, regresa al acceso.
+async function apiConSesion(accion, params = {}) {
+  const r = await api(accion, { ...params, token: leerToken() || '' });
+  if (r.sesionInvalida) {
+    borrarToken();
+    mostrarAcceso('Su sesión venció o fue cerrada. Vuelva a entrar.');
+    throw new Error('sesion');
+  }
+  return r;
+}
+
+/* ---------- Vistas ---------- */
+function mostrarVista(id) {
+  ['vista-cargando', 'vista-acceso', 'vista-inicio', 'vista-modulo'].forEach((v) => { $(v).hidden = v !== id; });
+  window.scrollTo(0, 0);
+}
+
+let avisoTimer;
+function aviso(texto) {
+  const a = $('aviso');
+  a.textContent = texto; a.hidden = false;
+  clearTimeout(avisoTimer);
+  avisoTimer = setTimeout(() => { a.hidden = true; }, 4500);
+}
+
+function mensaje(id, texto, tipo = 'error') {
+  const m = $(id);
+  if (!texto) { m.hidden = true; return; }
+  m.textContent = texto; m.className = 'mensaje ' + tipo; m.hidden = false;
+}
+
+/* ============ ARRANQUE ============ */
+async function arrancar() {
+  if (API_URL.indexOf('PEGAR_') === 0) {
+    sinConexion('Falta configurar la dirección del servidor (API_URL).', false);
+    return;
+  }
+  if (!leerToken()) { mostrarAcceso(); return; }
+
+  mostrarVista('vista-cargando');
+  $('cargando-texto').textContent = 'Cargando…';
+  $('cargando-girador').hidden = false;
+  $('btn-reintentar').hidden = true;
+  try {
+    const r = await apiConSesion('sesion');
+    if (!r.ok) throw new Error(r.error || 'error');
+    estado.perfil = r;
+    enrutar();
+  } catch (e) {
+    if (e.message !== 'sesion') sinConexion('No fue posible conectar con el servidor. Revise su conexión a internet.', true);
+  }
+}
+
+function sinConexion(texto, reintentar) {
+  mostrarVista('vista-cargando');
+  $('cargando-girador').hidden = true;
+  $('cargando-texto').textContent = texto;
+  $('btn-reintentar').hidden = !reintentar;
+}
+
+function enrutar() {
+  if (!estado.perfil) return;
+  const m = location.hash.match(/^#m\/([\w-]+)/);
+  const mod = m && MODULOS.find((x) => x.id === m[1]);
+  if (mod) abrirModulo(mod); else mostrarInicio();
+}
+
+/* ============ ACCESO ============ */
+function mostrarAcceso(textoMensaje) {
+  estado.perfil = null;
+  mostrarVista('vista-acceso');
+  $('form-correo').hidden = false;
+  $('form-codigo').hidden = true;
+  mensaje('msg-correo', textoMensaje || '', 'info');
+  history.replaceState(null, '', location.pathname + location.search);
+}
+
+$('form-correo').addEventListener('submit', async (ev) => {
+  ev.preventDefault();
+  const correo = $('correo').value.trim().toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) { mensaje('msg-correo', 'Escriba un correo válido.'); return; }
+  await enviarCodigo(correo, $('btn-enviar'), 'msg-correo', true);
+});
+
+async function enviarCodigo(correo, boton, idMensaje, cambiarPaso) {
+  boton.disabled = true;
+  const textoOriginal = boton.textContent;
+  boton.textContent = 'Enviando…';
+  mensaje(idMensaje, '');
+  try {
+    const r = await api('solicitarCodigo', { correo });
+    if (!r.ok) { mensaje(idMensaje, r.error || 'No se pudo enviar el código.'); return; }
+    if (cambiarPaso) {
+      $('correo-mostrado').textContent = correo;
+      $('form-correo').hidden = true;
+      $('form-codigo').hidden = false;
+      $('codigo').value = '';
+      mensaje('msg-codigo', '');
+      setTimeout(() => $('codigo').focus(), 50);
+    } else {
+      mensaje('msg-codigo', 'Se envió un código nuevo.', 'info');
+    }
+    iniciarEspera();
+  } catch (e) {
+    mensaje(idMensaje, 'No fue posible conectar con el servidor. Intente de nuevo.');
+  } finally {
+    boton.disabled = false;
+    boton.textContent = textoOriginal;
+    if (!cambiarPaso) iniciarEspera(true);
+  }
+}
+
+// Evita pedir códigos seguidos (el servidor permite uno por minuto).
+let esperaTimer;
+function iniciarEspera(soloPintar) {
+  if (!soloPintar) estado.cooldown = 60;
+  const b = $('btn-reenviar');
+  clearInterval(esperaTimer);
+  const pintar = () => {
+    b.disabled = estado.cooldown > 0;
+    b.textContent = estado.cooldown > 0 ? `Reenviar código (${estado.cooldown} s)` : 'Reenviar código';
+  };
+  pintar();
+  esperaTimer = setInterval(() => {
+    estado.cooldown = Math.max(0, estado.cooldown - 1);
+    pintar();
+    if (!estado.cooldown) clearInterval(esperaTimer);
+  }, 1000);
+}
+
+$('btn-reenviar').addEventListener('click', () => {
+  enviarCodigo($('correo-mostrado').textContent, $('btn-reenviar'), 'msg-codigo', false);
+});
+$('btn-cambiar').addEventListener('click', () => {
+  $('form-codigo').hidden = true; $('form-correo').hidden = false; $('correo').focus();
+});
+$('codigo').addEventListener('input', (ev) => {
+  ev.target.value = ev.target.value.replace(/\D/g, '').slice(0, 6);
+  if (ev.target.value.length === 6) $('form-codigo').requestSubmit();
+});
+
+$('form-codigo').addEventListener('submit', async (ev) => {
+  ev.preventDefault();
+  const codigo = $('codigo').value;
+  if (codigo.length !== 6) { mensaje('msg-codigo', 'El código tiene 6 dígitos.'); return; }
+  const b = $('btn-entrar');
+  if (b.disabled) return;
+  b.disabled = true; b.textContent = 'Verificando…';
+  mensaje('msg-codigo', '');
+  try {
+    const r = await api('verificarCodigo', {
+      correo: $('correo-mostrado').textContent, codigo, dispositivo: describirDispositivo()
+    });
+    if (!r.ok) { mensaje('msg-codigo', r.error || 'Código no válido.'); $('codigo').select(); return; }
+    guardarToken(r.token, $('recordar').checked);
+    await arrancar();
+  } catch (e) {
+    mensaje('msg-codigo', 'No fue posible conectar con el servidor. Intente de nuevo.');
+  } finally {
+    b.disabled = false; b.textContent = 'Entrar';
+  }
+});
+
+function describirDispositivo() {
+  const ua = navigator.userAgent;
+  const so = /iPhone/.test(ua) ? 'iPhone' : /iPad/.test(ua) ? 'iPad' : /Android/.test(ua) ? 'Android'
+    : /Windows/.test(ua) ? 'Windows' : /Mac OS X/.test(ua) ? 'Mac' : 'Otro';
+  const nav = /Edg\//.test(ua) ? 'Edge' : /Chrome\//.test(ua) ? 'Chrome' : /Firefox\//.test(ua) ? 'Firefox' : /Safari\//.test(ua) ? 'Safari' : 'Navegador';
+  const app = window.matchMedia('(display-mode: standalone)').matches ? ' (app)' : '';
+  return `${so} · ${nav}${app}`;
+}
+
+/* ============ INICIO ============ */
+function mostrarInicio() {
+  estado.moduloActual = null;
+  quitarMarco();
+  mostrarVista('vista-inicio');
+  const p = estado.perfil;
+  $('btn-avatar').textContent = iniciales2(p.nombre);
+  $('cuenta-nombre').textContent = p.nombre;
+  $('menu-nombre').textContent = p.nombre;
+  $('menu-cargo').textContent = p.cargo;
+
+  const h = new Date().getHours();
+  $('saludo').textContent = `${h < 12 ? 'Buenos días' : h < 19 ? 'Buenas tardes' : 'Buenas noches'}, ${p.nombreCorto}`;
+  const f = new Date().toLocaleDateString('es-MX', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  $('fecha-hoy').textContent = f.charAt(0).toUpperCase() + f.slice(1);
+
+  pintarAccesos();
+  cargarIndicadores();
+}
+
+// Primer nombre + primer apellido: "Dra. Karla Roxana Cano Guillén" da "KC", "Saúl Díaz Torres" da "SD".
+function iniciales2(nombre) {
+  const partes = nombre.replace(/^Dra?\.\s*/, '').split(/\s+/);
+  const ap = partes.length >= 4 ? partes[partes.length - 2] : partes[1];
+  return (partes[0][0] + (ap ? ap[0] : '')).toUpperCase();
+}
+
+function pintarAccesos() {
+  const cont = $('rejilla-accesos');
+  cont.innerHTML = MODULOS.filter((m) => !m.indicador).map((m) => `
+    <button class="acceso-directo" data-modulo="${esc(m.id)}">
+      <span class="ico">${svg(m.icono)}</span>
+      <span class="txt"><strong>${esc(m.nombre)}</strong><span>${esc(m.descripcion || '')}</span></span>
+      ${svg('flecha', 2)}
+    </button>`).join('');
+}
+
+function tarjetaIndicador(m, contenido, pastilla, pie) {
+  return `
+    <section class="tarjeta c-${esc(m.color)}" aria-labelledby="t-${esc(m.id)}">
+      <div class="tarjeta-cabeza">
+        <h2 id="t-${esc(m.id)}">${esc(m.nombre)}</h2>
+        ${pastilla ? `<span class="pastilla">${pastilla}</span>` : ''}
+      </div>
+      ${contenido}
+      <div class="tarjeta-pie">
+        <small>${pie || ''}</small>
+        <button data-modulo="${esc(m.id)}">Abrir módulo →</button>
+      </div>
+    </section>`;
+}
+
+function pintarIndicadores(datos) {
+  const cont = $('rejilla-indicadores');
+  cont.innerHTML = MODULOS.filter((m) => m.indicador).map((m) => {
+    if (datos === undefined) {
+      return tarjetaIndicador(m, `
+        <div class="esqueleto" style="height:36px;width:60%"></div>
+        <div class="esqueleto" style="height:8px"></div>`, '', 'Consultando…');
+    }
+    const d = datos && datos[m.indicador];
+    if (!d || d.porcentaje == null) {
+      return tarjetaIndicador(m, `<p class="sin-dato">Sin dato por ahora. El módulo sigue disponible.</p>`, '', '');
+    }
+    const ancho = Math.max(0, Math.min(100, d.porcentaje));
+    const barra = `<div class="barra" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${ancho}" aria-label="Avance ${esc(m.nombre)}"><i data-ancho="${ancho}"></i></div>`;
+
+    if (m.indicador === 'mastografias') {
+      const pie = d.ultimaCaptura ? 'Última captura: ' + fechaCorta(d.ultimaCaptura) : '';
+      return tarjetaIndicador(m, `
+        <div class="cifra"><b>${numero(d.realizados)}</b><span>de ${numero(d.meta)} estudios</span></div>${barra}`,
+        `${numero(d.porcentaje, 1)}% de la meta`, pie);
+    }
+    if (m.indicador === 'sus') {
+      return tarjetaIndicador(m, `
+        <div class="cifra"><b>${numero(d.porcentaje, 1)}%</b><span>de avance</span></div>${barra}`,
+        `${numero(d.completados)} de ${numero(d.universo)} espacios`, '');
+    }
+    return '';
+  }).join('');
+  // Anima las barras después de pintarlas.
+  requestAnimationFrame(() => cont.querySelectorAll('.barra i').forEach((i) => { i.style.width = i.dataset.ancho + '%'; }));
+}
+
+async function cargarIndicadores() {
+  pintarIndicadores(undefined);
+  $('consultado').textContent = '';
+  try {
+    const r = await apiConSesion('indicadores');
+    pintarIndicadores(r.ok ? r : null);
+    if (r.consultado) $('consultado').textContent = 'Datos al ' + fechaCorta(r.consultado, true);
+  } catch (e) {
+    if (e.message !== 'sesion') { pintarIndicadores(null); aviso('No se pudieron cargar los indicadores.'); }
+  }
+}
+
+function fechaCorta(iso, conHora) {
+  const d = new Date(iso);
+  if (isNaN(d)) return '';
+  const opciones = { day: 'numeric', month: 'short' };
+  if (conHora) { opciones.hour = '2-digit'; opciones.minute = '2-digit'; }
+  return d.toLocaleString('es-MX', opciones);
+}
+
+// Clic en cualquier tarjeta o acceso directo: abre el módulo.
+document.addEventListener('click', (ev) => {
+  const b = ev.target.closest('[data-modulo]');
+  if (b) { location.hash = 'm/' + b.dataset.modulo; return; }
+  if (!ev.target.closest('.cuenta')) cerrarMenu();
+});
+
+$('btn-actualizar').addEventListener('click', cargarIndicadores);
+
+/* ---------- Menú de la cuenta ---------- */
+function cerrarMenu() { $('menu-cuenta').hidden = true; $('btn-avatar').setAttribute('aria-expanded', 'false'); }
+$('btn-avatar').addEventListener('click', () => {
+  const abrir = $('menu-cuenta').hidden;
+  $('menu-cuenta').hidden = !abrir;
+  $('btn-avatar').setAttribute('aria-expanded', String(abrir));
+});
+document.addEventListener('keydown', (ev) => { if (ev.key === 'Escape') cerrarMenu(); });
+
+$('btn-salir').addEventListener('click', async () => {
+  const token = leerToken();
+  borrarToken();
+  cerrarMenu();
+  mostrarAcceso('Sesión cerrada.');
+  try { await api('cerrarSesion', { token: token || '' }); } catch (e) {}
+});
+
+/* ============ MÓDULO ============ */
+function pintarNavegacion(actual) {
+  const items = [{ id: '', corto: 'Inicio', icono: 'inicio' }, ...MODULOS];
+  $('navegacion').innerHTML = items.map((m) => `
+    <button data-nav="${esc(m.id)}" ${m.id === actual ? 'aria-current="page"' : ''}>${svg(m.icono)}<span>${esc(m.corto)}</span></button>`).join('');
+}
+$('navegacion').addEventListener('click', (ev) => {
+  const b = ev.target.closest('[data-nav]');
+  if (!b) return;
+  location.hash = b.dataset.nav ? 'm/' + b.dataset.nav : '';
+});
+
+async function abrirModulo(m) {
+  estado.moduloActual = m;
+  mostrarVista('vista-modulo');
+  $('mod-nombre').textContent = m.nombre;
+  document.title = m.corto + ' · Portal Ejecutivo';
+  pintarNavegacion(m.id);
+  await cargarEnMarco(m);
+}
+
+// Quita el marco del módulo anterior (así deja de cargar y no deja eventos pendientes).
+function quitarMarco() {
+  const viejo = document.getElementById('marco');
+  if (viejo) viejo.remove();
+}
+
+async function cargarEnMarco(m) {
+  quitarMarco();
+  estadoMarco('cargando', 'Abriendo ' + m.nombre + '…');
+  try {
+    const r = await apiConSesion('pase', { modulo: m.id });
+    if (estado.moduloActual !== m) return; // cambió de módulo mientras cargaba
+    if (!r.ok) { estadoMarco('error', r.error || 'No se pudo abrir el módulo.'); return; }
+    quitarMarco();
+    const marco = document.createElement('iframe');
+    marco.id = 'marco';
+    marco.title = m.nombre;
+    marco.allow = 'clipboard-write; fullscreen';
+    marco.referrerPolicy = 'no-referrer';
+    marco.addEventListener('load', () => { if (estado.moduloActual === m) estadoMarco('listo'); }, { once: true });
+    marco.src = r.url;
+    document.querySelector('.marco').appendChild(marco);
+  } catch (e) {
+    if (e.message !== 'sesion') estadoMarco('error', 'No fue posible conectar con el servidor.');
+  }
+}
+
+function estadoMarco(tipo, texto) {
+  $('marco-estado').hidden = tipo === 'listo';
+  $('marco-girador').hidden = tipo !== 'cargando';
+  $('marco-reintentar').hidden = tipo !== 'error';
+  if (texto) $('marco-texto').textContent = texto;
+}
+
+$('btn-volver').addEventListener('click', () => { location.hash = ''; });
+$('btn-recargar').addEventListener('click', () => estado.moduloActual && cargarEnMarco(estado.moduloActual));
+$('marco-reintentar').addEventListener('click', () => estado.moduloActual && cargarEnMarco(estado.moduloActual));
+
+// Abre el módulo fuera del portal con un pase nuevo (el del marco ya se usó).
+$('btn-pestana').addEventListener('click', async () => {
+  const m = estado.moduloActual;
+  if (!m) return;
+  const ventana = window.open('', '_blank'); // se abre de inmediato para que el teléfono no la bloquee
+  try {
+    const r = await apiConSesion('pase', { modulo: m.id });
+    if (!r.ok) throw new Error(r.error);
+    if (ventana) ventana.location.href = r.url; else location.href = r.url;
+  } catch (e) {
+    if (ventana) ventana.close();
+    if (e.message !== 'sesion') aviso('No se pudo abrir en pestaña nueva.');
+  }
+});
+
+/* ============ NAVEGACIÓN Y ARRANQUE ============ */
+window.addEventListener('hashchange', () => {
+  if (!estado.perfil) return;
+  if (!location.hash || location.hash === '#') document.title = 'Portal Ejecutivo · Atención Médica';
+  enrutar();
+});
+$('btn-reintentar').addEventListener('click', arrancar);
+
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+
+arrancar();
+</script>
+</body>
+</html>
